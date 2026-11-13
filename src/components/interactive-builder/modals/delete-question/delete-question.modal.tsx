@@ -4,6 +4,10 @@ import { Button, ModalBody, ModalFooter, ModalHeader } from '@carbon/react';
 import { showSnackbar } from '@openmrs/esm-framework';
 import type { FormField } from '@openmrs/esm-form-engine-lib';
 import type { Schema } from '@types';
+import {
+  removeAppointmentPostSubmissionAction,
+  syncAppointmentPostSubmissionAction,
+} from '../../../../utils/appointment-actions.utils';
 
 interface DeleteQuestionModal {
   closeModal: () => void;
@@ -31,6 +35,10 @@ const DeleteQuestionModal: React.FC<DeleteQuestionModal> = ({
 
   const restoreQuestion = () => {
     schema.pages[pageIndex].sections[sectionIndex].questions.splice(questionIndex, 0, question);
+
+    // Re-sync the appointment action if the restored question is an appointment question.
+    syncAppointmentPostSubmissionAction(schema, question);
+
     onSchemaChange({ ...schema });
 
     showSnackbar({
@@ -53,6 +61,9 @@ const DeleteQuestionModal: React.FC<DeleteQuestionModal> = ({
       } else {
         schema.pages[pageIndex].sections[sectionIndex].questions.splice(questionIndex, 1);
       }
+
+      // Drop any appointment post-submission action that was generated for this question.
+      removeAppointmentPostSubmissionAction(schema, question);
 
       onSchemaChange({ ...schema });
 

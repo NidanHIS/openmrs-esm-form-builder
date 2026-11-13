@@ -16,6 +16,10 @@ import { showSnackbar } from '@openmrs/esm-framework';
 import Question from './question-form/question/question.component';
 import { FormFieldProvider, useFormField } from './form-field-context';
 import type { FormField, FormSchema } from '@openmrs/esm-form-engine-lib';
+import {
+  hydrateAppointmentConfigFromSchema,
+  syncAppointmentPostSubmissionAction,
+} from '../../../../utils/appointment-actions.utils';
 import styles from './question.scss';
 
 interface QuestionModalProps {
@@ -121,6 +125,10 @@ const QuestionModalContent: React.FC<QuestionModalProps> = ({
       } else {
         schema.pages[pageIndex]?.sections?.[sectionIndex]?.questions?.push(formField);
       }
+
+      // Keep the appointment post-submission action in sync with the question's
+      // appointment config — inject / update / remove as needed.
+      syncAppointmentPostSubmissionAction(schema, formField, formFieldProp?.id || undefined);
 
       onSchemaChange({ ...schema });
 
@@ -231,7 +239,11 @@ const QuestionModal: React.FC<QuestionModalProps> = (props) => {
   return (
     <>
       <FormFieldProvider
-        initialFormField={props.formField ?? { type: 'control', questionOptions: { rendering: 'text' }, id: '' }}
+        initialFormField={
+          props.formField
+            ? hydrateAppointmentConfigFromSchema(props.formField, props.schema)
+            : { type: 'control', questionOptions: { rendering: 'text' }, id: '' }
+        }
       >
         <QuestionModalContent {...props} />
       </FormFieldProvider>

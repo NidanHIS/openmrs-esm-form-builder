@@ -47,7 +47,7 @@ export const renderingTypes: Array<RenderType> = [
 
 // Render types that are ONLY valid for obs questions — must not appear under
 // encounter or any other question type's rendering picker.
-export const obsOnlyRenderingTypes: Array<RenderType> = ['bed-select', 'multi-provider-select'];
+export const obsOnlyRenderingTypes: Array<RenderType> = ['bed-select', 'multi-provider-select', 'appointment'];
 
 // Bikram Sambat (Nepali) date render types registered by nidan-esm-nepali-calendar.
 // Only date/datetime variants exist — there is no BS "time" type.
