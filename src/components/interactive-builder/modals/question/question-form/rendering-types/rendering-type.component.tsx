@@ -1,5 +1,15 @@
 import React from 'react';
-import { Date, Markdown, Number, SelectAnswers, Text, TextArea, Toggle, UiSelectExtended } from './inputs';
+import {
+  Appointment,
+  Date,
+  Markdown,
+  Number,
+  SelectAnswers,
+  Text,
+  TextArea,
+  Toggle,
+  UiSelectExtended,
+} from './inputs';
 import { useFormField } from '../../form-field-context';
 import type { NidanRenderType } from '@types';
 import { renderTypeOptions } from '@constants';
@@ -21,6 +31,7 @@ const componentMap: Partial<Record<NidanRenderType, React.FC>> = {
   select: SelectAnswers,
   radio: SelectAnswers,
   checkbox: SelectAnswers,
+  appointment: Appointment,
 };
 
 const RenderTypeComponent: React.FC = () => {

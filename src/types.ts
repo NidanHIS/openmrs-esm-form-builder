@@ -142,3 +142,19 @@ export interface DatePickerTypeOption {
   label: string;
   defaultChecked: boolean;
 }
+
+/**
+ * Builder-side augmentation: the form engine does not model appointment authoring config on the
+ * question itself (it only consumes the generated `AppointmentSubmissionAction`), so we extend
+ * `FormQuestionOptions` locally to carry the selected service UUID while a question is being
+ * authored. On save this is synced into the schema's `postSubmissionActions` by
+ * `syncAppointmentPostSubmissionAction` (see `src/utils/appointment-actions.utils.ts`).
+ */
+declare module '@openmrs/esm-form-engine-lib' {
+  interface FormQuestionOptions {
+    appointmentConfig?: {
+      serviceUuid: string;
+      appointmentKind?: string;
+    };
+  }
+}
